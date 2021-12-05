@@ -325,6 +325,8 @@ function getDateFormat($date, $db_date=false){
     return date('d-m-Y', strtotime($date));
 }
 
+
+
 function getUrlSlug($id,$title){
     $slug = Str::slug($title, '-');
     return $id.'-'.$slug;

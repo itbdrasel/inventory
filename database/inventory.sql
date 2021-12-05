@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2021 at 11:29 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.4.13
+-- Generation Time: Dec 05, 2021 at 05:04 AM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 7.4.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `cms`
+-- Database: `inventory`
 --
 
 -- --------------------------------------------------------
@@ -129,36 +129,6 @@ INSERT INTO `activations` (`id`, `user_id`, `code`, `completed`, `completed_at`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `category`
---
-
-CREATE TABLE `category` (
-  `cat_id` int(11) NOT NULL,
-  `cat_title` varchar(30) NOT NULL,
-  `cat_alias` varchar(30) NOT NULL,
-  `cat_picture` varchar(50) DEFAULT NULL,
-  `cat_parent` varchar(4) NOT NULL DEFAULT 'root',
-  `cat_description` tinytext NOT NULL,
-  `cat_status` varchar(8) NOT NULL,
-  `cat_date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `category`
---
-
-INSERT INTO `category` (`cat_id`, `cat_title`, `cat_alias`, `cat_picture`, `cat_parent`, `cat_description`, `cat_status`, `cat_date`, `created_at`, `updated_at`) VALUES
-(1, 'Blog', 'blog', 'http://localhost:8080/images/paper-boat-2.jpg', 'root', 'This is Blog InvCategory. Any one can view blog post in this section', 'active', '2021-09-26 18:00:00', NULL, NULL),
-(2, 'Pages', 'pages', '', 'root', 'Blog', 'active', '2021-09-26 18:00:00', NULL, NULL),
-(12, 'New', 'new', '', '1', '', 'active', '2020-06-29 18:00:00', NULL, NULL),
-(13, 'Home', 'home', 'http://localhost:8080/images/paper-boat-3.jpg', 'root', 'Articles under this category will appear in the home page dynamic content. Do not delete this category.', 'active', '2021-09-26 18:00:00', NULL, NULL),
-(14, 'Testing', 'testing', '', 'root', '', 'active', '2021-09-26 18:00:00', NULL, NULL);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `failed_jobs`
 --
 
@@ -174,28 +144,225 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `fe_settings`
+-- Table structure for table `inv_brands`
 --
 
-CREATE TABLE `fe_settings` (
-  `s_id` int(11) NOT NULL,
-  `s_name` varchar(100) NOT NULL,
-  `s_value` varchar(250) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `inv_brands` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `brand_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `brand_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent` bigint(20) NOT NULL DEFAULT 0,
+  `category_id` bigint(20) DEFAULT NULL,
+  `supplier_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `fe_settings`
+-- Table structure for table `inv_categories`
 --
 
-INSERT INTO `fe_settings` (`s_id`, `s_name`, `s_value`) VALUES
-(1, 'appName', 'BPC'),
-(2, 'appTitle', 'Bangladesh Parjatan Corporation'),
-(3, 'url', 'https://tos.com.bd'),
-(4, 'email', 'contact@tos.com.bd'),
-(5, 'description', 'Road No. 09, PC Culture Housing Society, Mohammadpur, Dhaka.'),
-(8, 'contact', '09613555867'),
-(9, 'logo', 'logo-646293715.jpg'),
-(10, 'c_symbol', 'TK ');
+CREATE TABLE `inv_categories` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `parent` bigint(20) NOT NULL DEFAULT 0,
+  `mode` tinyint(4) NOT NULL DEFAULT 1,
+  `used_id` tinyint(4) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `inv_categories`
+--
+
+INSERT INTO `inv_categories` (`id`, `name`, `parent`, `mode`, `used_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Test', 0, 1, 1, 1, '2021-11-23 11:32:42', '2021-11-24 10:38:19'),
+(3, 'Test 2', 1, 2, 1, 1, '2021-11-23 11:46:38', '2021-11-24 11:02:11'),
+(4, 'Test 3', 3, 3, 1, 1, '2021-11-24 10:39:14', '2021-11-24 11:02:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_origins`
+--
+
+CREATE TABLE `inv_origins` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `origin_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `origin_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_packs`
+--
+
+CREATE TABLE `inv_packs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `pack_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pack_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_products`
+--
+
+CREATE TABLE `inv_products` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `category_id` bigint(20) NOT NULL,
+  `product_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_sku` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_unit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sell_unit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `purchase_unit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `unit_price` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `quantity` double DEFAULT NULL,
+  `alert_quantity` double DEFAULT NULL,
+  `product_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brand_id` bigint(20) DEFAULT NULL,
+  `pack_id` int(11) DEFAULT NULL,
+  `origin_id` int(11) DEFAULT NULL,
+  `image` int(11) DEFAULT NULL,
+  `expiry_date` date DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `discount_status` tinyint(4) NOT NULL DEFAULT 1,
+  `vat_status` tinyint(4) NOT NULL DEFAULT 1,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `inv_products`
+--
+
+INSERT INTO `inv_products` (`id`, `category_id`, `product_name`, `product_code`, `product_sku`, `product_unit`, `sell_unit`, `purchase_unit`, `unit_price`, `quantity`, `alert_quantity`, `product_type`, `brand_id`, `pack_id`, `origin_id`, `image`, `expiry_date`, `user_id`, `discount_status`, `vat_status`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'New', '545454', NULL, NULL, 'fdf', NULL, '88', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-30', 1, 1, 1, 1, '2021-11-29 13:18:26', '2021-12-01 11:37:47');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_product_pr`
+--
+
+CREATE TABLE `inv_product_pr` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `qty` double NOT NULL DEFAULT 0,
+  `pr_status` tinyint(4) NOT NULL DEFAULT 1 COMMENT '1=request, 2= received, 3=Cancel',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_product_warehouse`
+--
+
+CREATE TABLE `inv_product_warehouse` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `qty` double NOT NULL DEFAULT 0,
+  `requisition_status` tinyint(2) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_suppliers`
+--
+
+CREATE TABLE `inv_suppliers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `authorized` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `auth_details` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_units`
+--
+
+CREATE TABLE `inv_units` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `unit_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `unit_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_warehouses`
+--
+
+CREATE TABLE `inv_warehouses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `inv_warehouses`
+--
+
+INSERT INTO `inv_warehouses` (`id`, `name`, `phone`, `address`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Warehouse 1', NULL, NULL, 1, NULL, NULL),
+(2, 'Warehouse 2', NULL, NULL, 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_warehouse_pr`
+--
+
+CREATE TABLE `inv_warehouse_pr` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `pr_status` tinyint(4) NOT NULL DEFAULT 1 COMMENT '1=request, 2= received, 3=Cancel',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -214,10 +381,50 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2020_12_21_082939_create_hotel_lists_table', 1),
-(2, '2020_12_22_085815_create_hotel_rooms_table', 1),
-(3, '2014_07_02_230147_migration_cartalyst_sentinel', 2),
-(4, '2014_10_12_100000_create_password_resets_table', 2);
+(1, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(2, '2021_10_23_174235_create_users_table', 1),
+(3, '2021_10_23_175355_create_roles_table', 1),
+(4, '2021_10_23_175806_create_role_users_table', 1),
+(5, '2021_10_23_180615_create_tbl_module_sections_table', 1),
+(6, '2021_10_23_180929_create_persistences_table', 1),
+(7, '2021_10_23_181129_create_activations_table', 1),
+(8, '2021_10_23_181711_create_password_resets_table', 1),
+(9, '2021_10_23_183552_create_throttle_table', 1),
+(11, '2021_11_21_184921_create_inv_categories_table', 2),
+(13, '2021_11_24_173751_create_module_name_table', 3),
+(14, '2021_11_25_173958_create_inv_products_table', 4),
+(15, '2021_11_29_173700_create_inv_units_table', 4),
+(16, '2021_11_29_174203_create_inv_brands_table', 4),
+(17, '2021_11_29_175014_create_inv_packs_table', 4),
+(18, '2021_11_29_175158_create_inv_origins_table', 4),
+(19, '2021_11_29_175343_create_inv_suppliers_table', 4),
+(20, '2021_12_03_063304_create_inv_warehouses_table', 5),
+(21, '2021_12_03_063449_create_inv_product_warehouse_table', 5),
+(22, '2021_12_05_032450_create_inv_product_pr_table', 6),
+(23, '2021_12_05_033555_create_inv_warehouse_pr_table', 7);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module_name`
+--
+
+CREATE TABLE `module_name` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `module_url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `module_name`
+--
+
+INSERT INTO `module_name` (`id`, `name`, `module_code`, `module_url`, `created_at`, `updated_at`) VALUES
+(1, 'system', 'system', NULL, NULL, NULL),
+(2, 'Inventory', 'inv', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1645,20 +1852,40 @@ INSERT INTO `persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`)
 (2332, 6, 'CN8xyS5q9fTfnObJXghiMMMZvLivFtGY', '2021-10-12 05:23:49', '2021-10-12 05:23:49'),
 (2333, 6, 'aFxC3xd5WFhhoiI014vgOD4Pd7msU1c1', '2021-10-13 01:05:39', '2021-10-13 01:05:39'),
 (2334, 1, '6jsLskVjhabIP8evibejLPqXpJnKPkxP', '2021-10-13 01:15:59', '2021-10-13 01:15:59'),
-(2335, 1, 'yLYrUcmeUTfH7AHM9RD7lzedANg6oypE', '2021-10-18 02:33:15', '2021-10-18 02:33:15');
+(2335, 1, 'yLYrUcmeUTfH7AHM9RD7lzedANg6oypE', '2021-10-18 02:33:15', '2021-10-18 02:33:15'),
+(2336, 1, 'x9VbXyUmNiaI6CK4Mea7OVNfXykZhOE2', '2021-10-18 11:26:24', '2021-10-18 11:26:24'),
+(2338, 1, '5bRglLhRtAfLpVik5dkUAUOkg88CrtAt', '2021-10-20 00:38:37', '2021-10-20 00:38:37'),
+(2339, 1, 'N3khxxmyOBzlW4pCl0GNTxdIT33oceQt', '2021-10-20 09:30:19', '2021-10-20 09:30:19'),
+(2340, 1, 'GRctFUzgvj4FFUunku4UPr6YU2TCd5oy', '2021-10-22 09:31:32', '2021-10-22 09:31:32'),
+(2341, 1, 'jqtXB8rfdsiKus4jhCfopycfaf4Npdkq', '2021-10-22 11:26:10', '2021-10-22 11:26:10'),
+(2342, 1, 'BFubk5LMT5dybL1mxw8wjUN2MVTPaFeX', '2021-10-23 12:31:17', '2021-10-23 12:31:17'),
+(2343, 1, '0zRymwUQx5hrunjuY5Stn4Vj7J30158B', '2021-11-19 08:28:00', '2021-11-19 08:28:00'),
+(2344, 1, 'bko58hPXHp9UDiDBayvGJ1IsVcVNDIIO', '2021-11-19 08:32:34', '2021-11-19 08:32:34'),
+(2345, 1, 'rTuttMaSLQO44hWpcdKGsyaGBXtcLl2A', '2021-11-19 11:58:31', '2021-11-19 11:58:31'),
+(2346, 1, 'kOzG5eKbjcsgtJE4v2DUKyvzweCLgGRL', '2021-11-20 12:46:21', '2021-11-20 12:46:21'),
+(2347, 1, 'E1CFTgab4FZKTpPjmctI3y49b9bw8rCR', '2021-11-21 11:59:22', '2021-11-21 11:59:22'),
+(2348, 1, 'SWnhCpGctiPIaV42AdTsSCwh1gtCxeX6', '2021-11-22 11:55:46', '2021-11-22 11:55:46'),
+(2349, 1, 'rRJPzNh1W7VvDi8HeeeR5xFYg5uwRShf', '2021-11-23 10:46:44', '2021-11-23 10:46:44'),
+(2350, 1, 'ImxsB5Pyv7IKsRRCmYVYNg68mnckekul', '2021-11-24 10:37:58', '2021-11-24 10:37:58'),
+(2351, 1, 'vlCgiA8lqnC8iMMIrDLOJhqZgBTucenQ', '2021-11-27 11:54:48', '2021-11-27 11:54:48'),
+(2352, 1, 'lnKADfaiMrAmvutwrHwyh6DwIETWaeHO', '2021-11-29 11:18:48', '2021-11-29 11:18:48'),
+(2353, 1, 'wCaXZRcyYePgtQAohqozaXz9ZaJWr011', '2021-12-01 11:10:30', '2021-12-01 11:10:30'),
+(2354, 1, 'YJCQ2qeITqEdOCcwCDZwBmiqBgcpghS5', '2021-12-04 22:03:01', '2021-12-04 22:03:01');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reminders`
+-- Table structure for table `personal_access_tokens`
 --
 
-CREATE TABLE `reminders` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `completed` tinyint(1) NOT NULL DEFAULT 0,
-  `completed_at` timestamp NULL DEFAULT NULL,
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_used_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1675,15 +1902,16 @@ CREATE TABLE `roles` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `permissions` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `redirect_url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `roles`
 --
 
-INSERT INTO `roles` (`id`, `slug`, `name`, `permissions`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'Administrator', '{\"author.users\":true,\"author.user_edit\":true,\"author.user_delete\":true,\"author.permission\":true,\"author.permission_register\":true,\"author.ajax.permission_check\":true,\"author.roles\":true,\"base_setting\":true,\"author.logs\":true,\"author.category\":true,\"author.category.store\":true,\"category.delete\":true,\"author.category.create\":true,\"author.logs_show\":true,\"base_setting.store\":true,\"author.role_create\":true,\"author.permission_edit\":true,\"author.assign_permission\":true,\"author.change_password\":true,\"author.user_store\":true,\"author.user_profile\":true,\"author.user_create\":true,\"author.user_update\":true,\"author.change_password_store\":true,\"author.user_permission\":true,\"author.ajax.permission_remove\":true,\"author.role_store\":true,\"base_setting.logo\":true,\"author.category.edit\":true}', '2021-01-15 05:01:15', '2021-10-13 01:42:12');
+INSERT INTO `roles` (`id`, `slug`, `name`, `permissions`, `created_at`, `updated_at`, `redirect_url`) VALUES
+(1, 'admin', 'Administrator', '{\"author.users\":true,\"author.user_edit\":true,\"author.user_delete\":true,\"author.permission\":true,\"author.permission_register\":true,\"author.ajax.permission_check\":true,\"author.roles\":true,\"base_setting\":true,\"author.logs\":true,\"author.category\":true,\"author.category.store\":true,\"category.delete\":true,\"author.category.create\":true,\"author.logs_show\":true,\"base_setting.store\":true,\"author.role_create\":true,\"author.permission_edit\":true,\"author.assign_permission\":true,\"author.change_password\":true,\"author.user_store\":true,\"author.user_profile\":true,\"author.user_create\":true,\"author.user_update\":true,\"author.change_password_store\":true,\"author.user_permission\":true,\"author.ajax.permission_remove\":true,\"author.role_store\":true,\"base_setting.logo\":true,\"author.category.edit\":true}', '2021-01-15 05:01:15', '2021-10-13 01:42:12', NULL);
 
 -- --------------------------------------------------------
 
@@ -1708,236 +1936,6 @@ INSERT INTO `role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALU
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_languages`
---
-
-CREATE TABLE `tbl_languages` (
-  `id` int(11) NOT NULL,
-  `title` varchar(55) NOT NULL,
-  `short_title` varchar(20) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_languages`
---
-
-INSERT INTO `tbl_languages` (`id`, `title`, `short_title`, `created_at`, `updated_at`) VALUES
-(1, 'English', 'en', NULL, NULL),
-(2, 'Afar', 'aa', NULL, NULL),
-(3, 'Abkhazian', 'ab', NULL, NULL),
-(4, 'Afrikaans', 'af', NULL, NULL),
-(5, 'Amharic', 'am', NULL, NULL),
-(6, 'Arabic', 'ar', NULL, NULL),
-(7, 'Assamese', 'as', NULL, NULL),
-(8, 'Aymara', 'ay', NULL, NULL),
-(9, 'Azerbaijani', 'az', NULL, NULL),
-(10, 'Bashkir', 'ba', NULL, NULL),
-(11, 'Belarusian', 'be', NULL, NULL),
-(12, 'Bulgarian', 'bg', NULL, NULL),
-(13, 'Bihari', 'bh', NULL, NULL),
-(14, 'Bislama', 'bi', NULL, NULL),
-(15, 'Bengali/Bangla', 'bn', NULL, NULL),
-(16, 'Tibetan', 'bo', NULL, NULL),
-(17, 'Breton', 'br', NULL, NULL),
-(18, 'Catalan', 'ca', NULL, NULL),
-(19, 'Corsican', 'co', NULL, NULL),
-(20, 'Czech', 'cs', NULL, NULL),
-(21, 'Welsh', 'cy', NULL, NULL),
-(22, 'Danish', 'da', NULL, NULL),
-(23, 'German', 'de', NULL, NULL),
-(24, 'Bhutani', 'dz', NULL, NULL),
-(25, 'Greek', 'el', NULL, NULL),
-(26, 'Esperanto', 'eo', NULL, NULL),
-(27, 'Spanish', 'es', NULL, NULL),
-(28, 'Estonian', 'et', NULL, NULL),
-(29, 'Basque', 'eu', NULL, NULL),
-(30, 'Persian', 'fa', NULL, NULL),
-(31, 'Finnish', 'fi', NULL, NULL),
-(32, 'Fiji', 'fj', NULL, NULL),
-(33, 'Faeroese', 'fo', NULL, NULL),
-(34, 'French', 'fr', NULL, NULL),
-(35, 'Frisian', 'fy', NULL, NULL),
-(36, 'Irish', 'ga', NULL, NULL),
-(37, 'Scots/Gaelic', 'gd', NULL, NULL),
-(38, 'Galician', 'gl', NULL, NULL),
-(39, 'Guarani', 'gn', NULL, NULL),
-(40, 'Gujarati', 'gu', NULL, NULL),
-(41, 'Hausa', 'ha', NULL, NULL),
-(42, 'Hindi', 'hi', NULL, NULL),
-(43, 'Croatian', 'hr', NULL, NULL),
-(44, 'Hungarian', 'hu', NULL, NULL),
-(45, 'Armenian', 'hy', NULL, NULL),
-(46, 'Interlingua', 'ia', NULL, NULL),
-(47, 'Interlingue', 'ie', NULL, NULL),
-(48, 'Inupiak', 'ik', NULL, NULL),
-(49, 'Indonesian', 'in', NULL, NULL),
-(50, 'Icelandic', 'is', NULL, NULL),
-(51, 'Italian', 'it', NULL, NULL),
-(52, 'Hebrew', 'iw', NULL, NULL),
-(53, 'Japanese', 'ja', NULL, NULL),
-(54, 'Yiddish', 'ji', NULL, NULL),
-(55, 'Javanese', 'jw', NULL, NULL),
-(56, 'Georgian', 'ka', NULL, NULL),
-(57, 'Kazakh', 'kk', NULL, NULL),
-(58, 'Greenlandic', 'kl', NULL, NULL),
-(59, 'Cambodian', 'km', NULL, NULL),
-(60, 'Kannada', 'kn', NULL, NULL),
-(61, 'Korean', 'ko', NULL, NULL),
-(62, 'Kashmiri', 'ks', NULL, NULL),
-(63, 'Kurdish', 'ku', NULL, NULL),
-(64, 'Kirghiz', 'ky', NULL, NULL),
-(65, 'Latin', 'la', NULL, NULL),
-(66, 'Lingala', 'ln', NULL, NULL),
-(67, 'Laothian', 'lo', NULL, NULL),
-(68, 'Lithuanian', 'lt', NULL, NULL),
-(69, 'Latvian/Lettish', 'lv', NULL, NULL),
-(70, 'Malagasy', 'mg', NULL, NULL),
-(71, 'Maori', 'mi', NULL, NULL),
-(72, 'Macedonian', 'mk', NULL, NULL),
-(73, 'Malayalam', 'ml', NULL, NULL),
-(74, 'Mongolian', 'mn', NULL, NULL),
-(75, 'Moldavian', 'mo', NULL, NULL),
-(76, 'Marathi', 'mr', NULL, NULL),
-(77, 'Malay', 'ms', NULL, NULL),
-(78, 'Maltese', 'mt', NULL, NULL),
-(79, 'Burmese', 'my', NULL, NULL),
-(80, 'Nauru', 'na', NULL, NULL),
-(81, 'Nepali', 'ne', NULL, NULL),
-(82, 'Dutch', 'nl', NULL, NULL),
-(83, 'Norwegian', 'no', NULL, NULL),
-(84, 'Occitan', 'oc', NULL, NULL),
-(85, '(Afan)/Oromoor/Oriya', 'om', NULL, NULL),
-(86, 'Punjabi', 'pa', NULL, NULL),
-(87, 'Polish', 'pl', NULL, NULL),
-(88, 'Pashto/Pushto', 'ps', NULL, NULL),
-(89, 'Portuguese', 'pt', NULL, NULL),
-(90, 'Quechua', 'qu', NULL, NULL),
-(91, 'Rhaeto-Romance', 'rm', NULL, NULL),
-(92, 'Kirundi', 'rn', NULL, NULL),
-(93, 'Romanian', 'ro', NULL, NULL),
-(94, 'Russian', 'ru', NULL, NULL),
-(95, 'Kinyarwanda', 'rw', NULL, NULL),
-(96, 'Sanskrit', 'sa', NULL, NULL),
-(97, 'Sindhi', 'sd', NULL, NULL),
-(98, 'Sangro', 'sg', NULL, NULL),
-(99, 'Serbo-Croatian', 'sh', NULL, NULL),
-(100, 'Singhalese', 'si', NULL, NULL),
-(101, 'Slovak', 'sk', NULL, NULL),
-(102, 'Slovenian', 'sl', NULL, NULL),
-(103, 'Samoan', 'sm', NULL, NULL),
-(104, 'Shona', 'sn', NULL, NULL),
-(105, 'Somali', 'so', NULL, NULL),
-(106, 'Albanian', 'sq', NULL, NULL),
-(107, 'Serbian', 'sr', NULL, NULL),
-(108, 'Siswati', 'ss', NULL, NULL),
-(109, 'Sesotho', 'st', NULL, NULL),
-(110, 'Sundanese', 'su', NULL, NULL),
-(111, 'Swedish', 'sv', NULL, NULL),
-(112, 'Swahili', 'sw', NULL, NULL),
-(113, 'Tamil', 'ta', NULL, NULL),
-(114, 'Telugu', 'te', NULL, NULL),
-(115, 'Tajik', 'tg', NULL, NULL),
-(116, 'Thai', 'th', NULL, NULL),
-(117, 'Tigrinya', 'ti', NULL, NULL),
-(118, 'Turkmen', 'tk', NULL, NULL),
-(119, 'Tagalog', 'tl', NULL, NULL),
-(120, 'Setswana', 'tn', NULL, NULL),
-(121, 'Tonga', 'to', NULL, NULL),
-(122, 'Turkish', 'tr', NULL, NULL),
-(123, 'Tsonga', 'ts', NULL, NULL),
-(124, 'Tatar', 'tt', NULL, NULL),
-(125, 'Twi', 'tw', NULL, NULL),
-(126, 'Ukrainian', 'uk', NULL, NULL),
-(127, 'Urdu', 'ur', NULL, NULL),
-(128, 'Uzbek', 'uz', NULL, NULL),
-(129, 'Vietnamese', 'vi', NULL, NULL),
-(130, 'Volapuk', 'vo', NULL, NULL),
-(131, 'Wolof', 'wo', NULL, NULL),
-(132, 'Xhosa', 'xh', NULL, NULL),
-(133, 'Yoruba', 'yo', NULL, NULL),
-(134, 'Chinese', 'zh', NULL, NULL),
-(135, 'Zulu', 'zu', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_logs`
---
-
-CREATE TABLE `tbl_logs` (
-  `log_id` int(11) NOT NULL,
-  `log_title` text NOT NULL,
-  `log_type` varchar(50) NOT NULL,
-  `log_tr_id` varchar(50) DEFAULT NULL,
-  `log_amount` varchar(30) NOT NULL,
-  `log_creator` int(11) NOT NULL,
-  `log_date` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tbl_logs`
---
-
-INSERT INTO `tbl_logs` (`log_id`, `log_title`, `log_type`, `log_tr_id`, `log_amount`, `log_creator`, `log_date`) VALUES
-(1, 'Route (Section : Users, Permission : user_profile) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:32'),
-(2, 'Route (Section : Users, Permission : user_create) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:47'),
-(3, 'Route (Section : Users, Permission : user_edit) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:59'),
-(4, 'Route (Section : Users, Permission : user_store) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:09'),
-(5, 'Route (Section : Users, Permission : user_update) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:19'),
-(6, 'Route (Section : Users, Permission : user_delete) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:32'),
-(7, 'Route (Section : Users, Permission : change_password) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:48'),
-(8, 'Route (Section : Users, Permission : change_password_store) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:00'),
-(9, 'Route (Section : User Roles, Permission : role_create) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:33'),
-(10, 'Route (Section : User Roles, Permission : role_store) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:44'),
-(11, 'Route (Section : Permissions, Permission : assign_permission) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:07'),
-(12, 'Route (Section : Permissions, Permission : user_permission) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:23'),
-(13, 'Route (Section : Permissions, Permission : permission_register) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:11'),
-(14, 'Route (Section : Permissions, Permission : permission_edit) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:24'),
-(15, 'Route (Section : Permissions, Permission : permission_remove) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:43'),
-(16, 'Route (Section : Permissions, Permission : permission_check) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:03'),
-(17, 'Route (Section : Settings, Permission : store) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:27'),
-(18, 'Route (Section : Settings, Permission : logo) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:39'),
-(19, 'Route (Section : Settings, Permission : logs) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:51'),
-(20, 'Route (Section : Settings, Permission : logs_show) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:02'),
-(21, 'Route (Section : InvCategory, Permission : create) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:39'),
-(22, 'Route (Section : InvCategory, Permission : edit) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:52'),
-(23, 'Route (Section : InvCategory, Permission : store) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:09'),
-(24, 'Route (Section : InvCategory, Permission : delete) was create by BPC', 'route_permission_create', NULL, '0', 1, '2021-10-13 07:10:21'),
-(25, 'Route (Section : Users, Permission : Users) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:47'),
-(26, 'Route (Section : Users, Permission : User edit) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:48'),
-(27, 'Route (Section : Users, Permission : User delete) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:48'),
-(28, 'Route (Section : Permissions, Permission : Permission) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:49'),
-(29, 'Route (Section : Permissions, Permission : Permission register) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:50'),
-(30, 'Route (Section : Permissions, Permission : Permission check) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:50'),
-(31, 'Route (Section : User Roles, Permission : Roles) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:51'),
-(32, 'Route (Section : Settings, Permission : Base setting) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:52'),
-(33, 'Route (Section : Settings, Permission : Logs) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:53'),
-(34, 'Route (Section : InvCategory, Permission : InvCategory) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:54'),
-(35, 'Route (Section : InvCategory, Permission : Store) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:55'),
-(36, 'Route (Section : InvCategory, Permission : Delete) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:55'),
-(37, 'Route (Section : InvCategory, Permission : Create) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:57'),
-(38, 'Route (Section : Settings, Permission : Logs show) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:57'),
-(39, 'Route (Section : Settings, Permission : Store) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:58'),
-(40, 'Route (Section : User Roles, Permission : Role create) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:59'),
-(41, 'Route (Section : Permissions, Permission : Permission edit) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:01'),
-(42, 'Route (Section : Permissions, Permission : Assign permission) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:01'),
-(43, 'Route (Section : Users, Permission : Change password) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:02'),
-(44, 'Route (Section : Users, Permission : User store) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:03'),
-(45, 'Route (Section : Users, Permission : User profile) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:04'),
-(46, 'Route (Section : Users, Permission : User create) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:05'),
-(47, 'Route (Section : Users, Permission : User update) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:06'),
-(48, 'Route (Section : Users, Permission : Change password store) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:07'),
-(49, 'Route (Section : Permissions, Permission : User permission) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:08'),
-(50, 'Route (Section : Permissions, Permission : Permission remove) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:08'),
-(51, 'Route (Section : User Roles, Permission : Role store) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:10'),
-(52, 'Route (Section : Settings, Permission : Logo) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:11'),
-(53, 'Route (Section : InvCategory, Permission : Edit) was add by BPC', 'route_permission_add', NULL, '0', 1, '2021-10-13 07:10:12');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tbl_module_sections`
 --
 
@@ -1956,11 +1954,11 @@ CREATE TABLE `tbl_module_sections` (
 --
 
 INSERT INTO `tbl_module_sections` (`section_id`, `section_name`, `section_module_name`, `section_action_route`, `section_roles_permission`, `created_at`, `updated_at`) VALUES
-(1, 'Users', NULL, '{\"author.users\":[\"1\"],\"author.user_profile\":[\"1\"],\"author.user_create\":[\"1\"],\"author.user_edit\":[\"1\"],\"author.user_store\":[\"1\"],\"author.user_update\":[\"1\"],\"author.user_delete\":[\"1\"],\"author.change_password\":[\"1\"],\"author.change_password_store\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:28:15', '2021-10-13 07:28:15'),
-(2, 'Permissions', NULL, '{\"author.permission\":[\"1\"],\"author.assign_permission\":[\"1\"],\"author.user_permission\":[\"1\"],\"author.permission_register\":[\"1\"],\"author.permission_edit\":[\"1\"],\"author.ajax.permission_remove\":[\"1\"],\"author.ajax.permission_check\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:30:32', '2021-10-13 07:30:32'),
-(3, 'User Roles', NULL, '{\"author.roles\":[\"1\"],\"author.role_create\":[\"1\"],\"author.role_store\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:35:03', '2021-10-13 07:35:03'),
-(4, 'Settings', NULL, '{\"base_setting\":[\"1\"],\"base_setting.store\":[\"1\"],\"base_setting.logo\":[\"1\"],\"author.logs\":[\"1\"],\"author.logs_show\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:39:15', '2021-10-13 07:39:15'),
-(5, 'InvCategory', NULL, '{\"author.category\":[\"1\"],\"author.category.create\":[\"1\"],\"author.category.edit\":[\"1\"],\"author.category.store\":[\"1\"],\"category.delete\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:40:26', '2021-10-13 07:40:26');
+(1, 'Users', 'system', '{\"author.users\":[\"1\"],\"author.user_profile\":[\"1\"],\"author.user_create\":[\"1\"],\"author.user_edit\":[\"1\"],\"author.user_store\":[\"1\"],\"author.user_update\":[\"1\"],\"author.user_delete\":[\"1\"],\"author.change_password\":[\"1\"],\"author.change_password_store\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:28:15', '2021-10-13 07:28:15'),
+(2, 'Permissions', 'system', '{\"author.permission\":[\"1\"],\"author.assign_permission\":[\"1\"],\"author.user_permission\":[\"1\"],\"author.permission_register\":[\"1\"],\"author.permission_edit\":[\"1\"],\"author.ajax.permission_remove\":[\"1\"],\"author.ajax.permission_check\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:30:32', '2021-10-13 07:30:32'),
+(3, 'User Roles', 'system', '{\"author.roles\":[\"1\"],\"author.role_create\":[\"1\"],\"author.role_store\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:35:03', '2021-10-13 07:35:03'),
+(4, 'Settings', 'system', '{\"base_setting\":[\"1\"],\"base_setting.store\":[\"1\"],\"base_setting.logo\":[\"1\"],\"author.logs\":[\"1\"],\"author.logs_show\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:39:15', '2021-10-13 07:39:15'),
+(5, 'Category', 'system', '{\"author.category\":[\"1\"],\"author.category.create\":[\"1\"],\"author.category.edit\":[\"1\"],\"author.category.store\":[\"1\"],\"category.delete\":[\"1\"]}', '[\"1\"]', '2021-10-13 07:40:26', '2021-10-13 07:40:26');
 
 -- --------------------------------------------------------
 
@@ -1989,7 +1987,7 @@ INSERT INTO `tbl_settings` (`s_id`, `s_name`, `s_value`, `updated_at`) VALUES
 (9, 'logo', '/images/base_setting/logo.png', '2021-04-15 06:58:12'),
 (10, 'c_symbol', 'BDT', '2021-10-05 06:07:37'),
 (11, 'c_order', 'left', '2021-04-10 07:28:05'),
-(12, 'date_format', '2017-12-13', '2021-04-10 10:45:08'),
+(12, 'date_format', 'd-m-Y', '2021-11-23 12:35:21'),
 (16, 'usd_rate', '85', '2021-04-10 07:28:05');
 
 -- --------------------------------------------------------
@@ -2031,7 +2029,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `permissions`, `last_login`, `full_name`, `phone`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'admin@mail.com', '$2y$10$n9xS8/8yiEHEVzs2fPyhWuCjxgHF3CjPTF59bUhZBTUV2Cc/Q3Hx6', NULL, '2021-10-18 02:33:15', 'BPC', NULL, 1, '2021-01-15 12:37:06', '2021-10-18 02:33:15');
+(1, 'admin@mail.com', '$2y$10$n9xS8/8yiEHEVzs2fPyhWuCjxgHF3CjPTF59bUhZBTUV2Cc/Q3Hx6', NULL, '2021-12-04 22:03:01', 'BPC', NULL, 1, '2021-01-15 12:37:06', '2021-12-04 22:03:01');
 
 --
 -- Indexes for dumped tables
@@ -2044,30 +2042,87 @@ ALTER TABLE `activations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `category`
---
-ALTER TABLE `category`
-  ADD PRIMARY KEY (`cat_id`),
-  ADD UNIQUE KEY `id` (`cat_id`),
-  ADD KEY `cat_title` (`cat_title`);
-
---
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `fe_settings`
+-- Indexes for table `inv_brands`
 --
-ALTER TABLE `fe_settings`
-  ADD PRIMARY KEY (`s_id`),
-  ADD KEY `s_name` (`s_name`);
+ALTER TABLE `inv_brands`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_categories`
+--
+ALTER TABLE `inv_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_origins`
+--
+ALTER TABLE `inv_origins`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_packs`
+--
+ALTER TABLE `inv_packs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_products`
+--
+ALTER TABLE `inv_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_product_pr`
+--
+ALTER TABLE `inv_product_pr`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_product_warehouse`
+--
+ALTER TABLE `inv_product_warehouse`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_suppliers`
+--
+ALTER TABLE `inv_suppliers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_units`
+--
+ALTER TABLE `inv_units`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_warehouses`
+--
+ALTER TABLE `inv_warehouses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inv_warehouse_pr`
+--
+ALTER TABLE `inv_warehouse_pr`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `module_name`
+--
+ALTER TABLE `module_name`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2084,10 +2139,12 @@ ALTER TABLE `persistences`
   ADD UNIQUE KEY `persistences_code_unique` (`code`);
 
 --
--- Indexes for table `reminders`
+-- Indexes for table `personal_access_tokens`
 --
-ALTER TABLE `reminders`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `personal_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
 -- Indexes for table `roles`
@@ -2101,18 +2158,6 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `role_users`
   ADD PRIMARY KEY (`user_id`);
-
---
--- Indexes for table `tbl_languages`
---
-ALTER TABLE `tbl_languages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tbl_logs`
---
-ALTER TABLE `tbl_logs`
-  ADD PRIMARY KEY (`log_id`);
 
 --
 -- Indexes for table `tbl_module_sections`
@@ -2153,58 +2198,106 @@ ALTER TABLE `activations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
--- AUTO_INCREMENT for table `category`
---
-ALTER TABLE `category`
-  MODIFY `cat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `fe_settings`
+-- AUTO_INCREMENT for table `inv_brands`
 --
-ALTER TABLE `fe_settings`
-  MODIFY `s_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+ALTER TABLE `inv_brands`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `inv_categories`
+--
+ALTER TABLE `inv_categories`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `inv_origins`
+--
+ALTER TABLE `inv_origins`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `inv_packs`
+--
+ALTER TABLE `inv_packs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `inv_products`
+--
+ALTER TABLE `inv_products`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `inv_product_pr`
+--
+ALTER TABLE `inv_product_pr`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `inv_product_warehouse`
+--
+ALTER TABLE `inv_product_warehouse`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `inv_suppliers`
+--
+ALTER TABLE `inv_suppliers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `inv_units`
+--
+ALTER TABLE `inv_units`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `inv_warehouses`
+--
+ALTER TABLE `inv_warehouses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `inv_warehouse_pr`
+--
+ALTER TABLE `inv_warehouse_pr`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `module_name`
+--
+ALTER TABLE `module_name`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `persistences`
 --
 ALTER TABLE `persistences`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2336;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2355;
 
 --
--- AUTO_INCREMENT for table `reminders`
+-- AUTO_INCREMENT for table `personal_access_tokens`
 --
-ALTER TABLE `reminders`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `personal_access_tokens`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `tbl_languages`
---
-ALTER TABLE `tbl_languages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
-
---
--- AUTO_INCREMENT for table `tbl_logs`
---
-ALTER TABLE `tbl_logs`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `tbl_module_sections`

@@ -7,10 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Inventory\Entities\InvCategory;
 use Modules\Inventory\Entities\InvProduct;
+use Modules\Inventory\Entities\InvProductPr;
+use Modules\Inventory\Entities\InvProductWarehouse;
+use Modules\Inventory\Entities\InvWarehouse;
+use Modules\Inventory\Entities\InvWarehousePr;
 use Validator;
 use Sentinel;
 
-class ProductsController extends Controller
+class ProductPrController extends Controller
 {
 
     private $model;
@@ -20,17 +24,17 @@ class ProductsController extends Controller
     private $title;
 
     public function __construct(){
-        $this->model = InvProduct::class;
+        $this->model = InvWarehousePr::class;
         $this->moduleName = 'inventory';
-        $this->title = 'Product';
-        $this->bUrl = $this->moduleName.'/products';
+        $this->title = 'Product PR';
+        $this->bUrl = $this->moduleName.'/product_pr';
 
     }
 
     public function layout($pageName){
         $this->data['bUrl'] = $this->bUrl;
         $this->data['moduleName'] = $this->moduleName;
-        echo view($this->moduleName.'::.products.'.$pageName.'', $this->data);
+        echo view($this->moduleName.'::.product_pr.'.$pageName.'', $this->data);
     }
 
     /**
@@ -62,10 +66,10 @@ class ProductsController extends Controller
         $queryData = $this->model::orderByFilter($this->model);
 
         //filter by text.....
-        if( $request->filled('filter') ){
-            $filter = $this->data['filter'] = $request->get('filter');
-            $queryData->where('name', 'like', '%'.$filter.'%');
-        }
+//        if( $request->filled('filter') ){
+//            $filter = $this->data['filter'] = $request->get('filter');
+//            $queryData->where('name', 'like', '%'.$filter.'%');
+//        }
 
 
 
@@ -85,8 +89,9 @@ class ProductsController extends Controller
             'title'         => 'Add New '.$this->title,
             'page_icon'     => '<i class="fa fa-book"></i>',
             'objData'       => '',
-            'categories'    => InvCategory::where('status',1)->get()
         ];
+        $this->data['warehouses']   = InvWarehouse::get();
+        $this->data['products']     = InvProduct::where('status',1)->get();
         $this->layout('create');
     }
 
@@ -101,7 +106,6 @@ class ProductsController extends Controller
 
         $rules = [
             'product_name'      => 'required',
-            'product_code'      => 'required|unique:inv_products,product_code',
             'category_id'       => 'required',
             'sell_unit'         => 'required',
             'discount_status'   => 'required',
@@ -109,9 +113,6 @@ class ProductsController extends Controller
             'status'            => 'required',
         ];
 
-        if (!empty($id)){
-            $rules['product_code']= 'required|unique:inv_products,product_code,'.$id.',id';
-        }
 
         $attribute =[
 

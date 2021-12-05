@@ -47,3 +47,7 @@ function emailSend($to, $subject, $data,$view='mail'){
 function dbDateFormat($date){
     return date('Y-m-d', strtotime($date));
 }
+
+function userDateFormat($date){
+    return date(config('settings')['date_format'], strtotime($date));
+}

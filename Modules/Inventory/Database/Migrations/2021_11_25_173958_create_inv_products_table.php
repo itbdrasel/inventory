@@ -16,16 +16,17 @@ class CreateInvProductsTable extends Migration
         Schema::create('inv_products', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('category_id');
-            $table->string('name');
+            $table->string('product_name');
             $table->string('product_code')->nullable();
             $table->string('product_sku')->nullable();
             $table->string('product_unit')->nullable();
             $table->string('sell_unit')->nullable();
             $table->string('purchase_unit')->nullable();
             $table->string('unit_price')->nullable();
-            $table->string('type')->nullable();
+            $table->double('quantity')->nullable();
+            $table->double('alert_quantity')->nullable();
+            $table->string('product_type')->nullable();
             $table->bigInteger('brand_id')->nullable();
-            $table->integer('pack_id')->nullable();
             $table->integer('pack_id')->nullable();
             $table->integer('origin_id')->nullable();
             $table->integer('image')->nullable();

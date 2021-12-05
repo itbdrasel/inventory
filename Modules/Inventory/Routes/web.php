@@ -32,7 +32,11 @@ Route::group(['prefix' => 'inventory', 'as'=>'inventory.'], function()
 
     Route::group(['prefix' => 'products', 'as'=>'products'], function()
     {
-        resourceRoute('ProductsController');
+        resourceRoute('ProductsController', true);
+    });
+    Route::group(['prefix' => 'product-pr', 'as'=>'product_pr'], function()
+    {
+        resourceRoute('ProductPrController');
     });
 });
 
