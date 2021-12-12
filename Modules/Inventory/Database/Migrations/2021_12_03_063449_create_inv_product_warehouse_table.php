@@ -18,7 +18,7 @@ class CreateInvProductWarehouseTable extends Migration
             $table->bigInteger('product_id');
             $table->integer('warehouse_id');
             $table->double('qty')->default(false);
-            $table->tinyInteger('requisition_status')->default(false);
+            $table->tinyInteger('requisition_status')->default(true);
             $table->timestamps();
         });
     }

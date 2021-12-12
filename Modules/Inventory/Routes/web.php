@@ -11,32 +11,47 @@
 |
 */
 
+function getInvResourceRoute($controller, $array=''){
 
- function resourceRoute($controller, $show=false){
-     Route::get( '/create', ['as' => '.create', 'uses' => $controller.'@create']);
-     Route::get( '/{id}/edit', ['as' => '.edit', 'uses' => $controller.'@edit']);
-     Route::match(['get', 'post'], '/', [ 'as' => '', 'uses' => $controller.'@index']);
-     Route::post( '/store', ['as' => '.store', 'uses' => $controller.'@store']);
-     Route::match(['get', 'post'], '/delete/{id}', ['as' => '.delete', 'uses' => $controller.'@destroy']);
-     if ($show){
-         Route::get( 'show/{id}', ['as' => '.show', 'uses' => $controller.'@show']);
-     }
+    for ($i=0; $i<count($array); $i++){
+        $url =  $array[$i];
+        if ($url=='index') {
+            Route::match(['get', 'post'], '/', $controller.'@index')->name('');
+        }elseif ($url=='store'){
+            Route::post('/store', $controller.'@store')->name('.store');
+        } elseif ($url=='create'){
+            Route::get('/create', $controller.'@create')->name('.create');
+        } elseif ($url=='edit'){
+            Route::get('/{id}/edit', $controller.'@edit')->name('.edit');
+        }elseif ($url=='update'){
+            Route::post('/update', $controller.'@update')->name('.update');
+        }elseif ($url=='show'){
+            Route::get('/{id}', $controller.'@show')->name('.show');
+        } elseif ($url=='delete'){
+            Route::match(['get', 'post'], '/delete/{id}', $controller.'@destroy')->where(['id'=>'[0-9]+'])->name('.delete');
+        }
+
+    }
 }
+
 
 Route::group(['prefix' => 'inventory', 'as'=>'inventory.'], function()
 {
     Route::group(['prefix' => 'categories', 'as'=>'categories'], function()
     {
-        resourceRoute('CategoriesController');
+        getInvResourceRoute('CategoriesController', ['index', 'store', 'create','edit','delete']);
     });
 
     Route::group(['prefix' => 'products', 'as'=>'products'], function()
     {
-        resourceRoute('ProductsController', true);
+        getInvResourceRoute('ProductsController', ['index', 'store', 'create','edit','delete']);
     });
     Route::group(['prefix' => 'product-pr', 'as'=>'product_pr'], function()
     {
-        resourceRoute('ProductPrController');
+        getInvResourceRoute('ProductPrController', ['index', 'store', 'create','show','delete']);
+        $controller = 'ProductPrController';
+        Route::get('/product/{id}', $controller.'@product')->name('.product');
+        Route::post('/product/store', $controller.'@productStore')->name('.product_store');
     });
 });
 

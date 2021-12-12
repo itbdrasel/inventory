@@ -23,41 +23,21 @@
                 <div class="col-md-10">
                     <div class="form-group row">
                         @php
-                            $input_name = 'product_name';
+                            $input_name = 'warehouse_id';
                         @endphp
-                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}<code>*</code></label>
+                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace(['_id', '_'],[' ',''],$input_name))}}<code>*</code></label>
                         <div class="col-sm-4">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror "value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                        @php
-                            $input_name = 'category_id';
-                        @endphp
-                        <label class="col-sm-2 col-form-label" for="{{$input_name}}">Category <code>*</code></label>
-                        <div class="col-sm-3">
-                            <select name="{{$input_name}}" id="{{$input_name}}" class="form-control select2 select2-hidden-accessible @error($input_name) is-invalid @enderror " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-                                <option value="">Select Category</option>
-                            @if(!empty($categories))
-                                @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ (getValue($input_name, $objData) == $category->id) ? 'selected': '' }}>{{ $category->name }}</option>
+                        <select name="{{$input_name}}" id="{{$input_name}}" class="form-control select2 select2-hidden-accessible @error($input_name) is-invalid @enderror " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                            <option value="">Select Category</option>
+                            @if(!empty($warehouses))
+                                @foreach($warehouses as $warehouse)
+                                    <option value="{{ $warehouse->id }}" {{ (getValue($input_name, $objData) == $warehouse->id) ? 'selected': '' }}>{{ $warehouse->name }}</option>
                                 @endforeach
                             @endif
-                            </select>
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        @php
-                            $input_name = 'product_code';
-                        @endphp
-                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}<code>*</code></label>
-                        <div class="col-sm-4">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror "value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
+                        </select>
                         </div>
                         @php
-                            $input_name = 'product_sku';
+                            $input_name = 'title';
                         @endphp
                         <label class="col-sm-2 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}} </label>
                         <div class="col-sm-3">
@@ -65,123 +45,45 @@
                             <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        @php
-                            $input_name = 'product_unit';
-                        @endphp
-                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}</label>
-                        <div class="col-sm-4">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror "value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                        @php
-                            $input_name = 'sell_unit';
-                        @endphp
-                        <label class="col-sm-2 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}<code>*</code></label>
-                        <div class="col-sm-3">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror "value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        @php
-                            $input_name = 'product_type';
-                        @endphp
-                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}</label>
-                        <div class="col-sm-4">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror "value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                        @php
-                            $input_name = 'brand_id';
-                        @endphp
-                        <label class="col-sm-2 col-form-label" for="{{$input_name}}">{{ucfirst('brand')}}</label>
-                        <div class="col-sm-3">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror "value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        @php
-                            $input_name = 'pack_id';
-                        @endphp
-                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">{{ucfirst('pack')}}</label>
-                        <div class="col-sm-4">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror "value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                        @php
-                            $input_name = 'origin_id';
-                        @endphp
-                        <label class="col-sm-2 col-form-label" for="{{$input_name}}">{{ucfirst('origin')}}</label>
-                        <div class="col-sm-3">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror " value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        @php
-                            $input_name = 'expiry_date';
-                            $date_format = str_replace(["Y",'d','m'],["YY",'DD','MM'],config('settings')['date_format']);
-                            $date_format_inp = config('settings')['date_format'];
-                           $expiry_date= getValue($input_name, $objData);
-                           if (!empty($expiry_date)){
-                               $expiry_date = userDateFormat($expiry_date);
-                           }
-                        @endphp
-                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}</label>
-                        <div class="col-sm-4">
-                            <input name="{{$input_name}}" readonly autocomplete="off" placeholder="{{$date_format}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror  datepicker" value="{{ $expiry_date }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                        @php
-                            $input_name = 'unit_price';
-                        @endphp
-                        <label class="col-sm-2 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}</label>
-                        <div class="col-sm-3">
-                            <input name="{{$input_name}}" id="{{$input_name}}" type="text" class="form-control @error($input_name) is-invalid @enderror " value="{{ getValue($input_name, $objData) }}">
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        @php
-                            $input_name = 'discount_status';
-                        @endphp
-                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}<code>*</code></label>
-                        <div class="col-sm-4">
-                            <select name="{{$input_name}}" id="{{$input_name}}" class="form-control @error($input_name) is-invalid @enderror">
-                                <option {{ (getValue($input_name, $objData) == 1) ? 'selected': '' }} value="1">Active</option>
-                                <option {{ (getValue($input_name, $objData) === '0') ? 'selected': '' }} value="0">Inactive</option>
-                            </select>
-                        </div>
-                        @php
-                            $input_name = 'vat_status';
-                        @endphp
-                        <label class="col-sm-2 col-form-label" for="{{$input_name}}">{{ucfirst(str_replace('_',' ',$input_name))}}<code>*</code></label>
-                        <div class="col-sm-3">
-                            <select name="{{$input_name}}" id="{{$input_name}}" class="form-control @error($input_name) is-invalid @enderror">
-                                <option {{ (getValue($input_name, $objData) == 1) ? 'selected': '' }} value="1">Active</option>
-                                <option {{ (getValue($input_name, $objData) === '0') ? 'selected': '' }} value="0">Inactive</option>
-                            </select>
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
-                    </div>
+                    <style>
+                        table td, table th {
+                            vertical-align: middle !important;
+                        }
+                    </style>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th class="text-center">Code</th>
+                                <th class="text-center" width="30%">Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @if (!empty($products))
+                            @foreach($products as $product)
+                            <tr>
+                                <td>{{$product->product_name}}</td>
+                                <td>{{$product->category->name}}</td>
+                                <td class="text-center">{{$product->product_code}}</td>
+                                <td>
+                                    <input type="text" class="form-control onlyNumber" value="" name="qty[{{$product->id}}]">
+                                </td>
+                            </tr>
+                            @endforeach
+                        @endif
+                        </tbody>
+                    </table>
 
 
-                    <div class="form-group row">
-                        @php
-                            $input_name = 'status';
-                        @endphp
-                        <label class="col-sm-3 col-form-label" for="{{$input_name}}">Status <code>*</code></label>
-                        <div class="col-sm-4">
-                            <select name="{{$input_name}}" id="{{$input_name}}" class="form-control @error($input_name) is-invalid @enderror">
-                                <option {{ (getValue($input_name, $objData) == 1) ? 'selected': '' }} value="1">Active</option>
-                                <option {{ (getValue($input_name, $objData) === '0') ? 'selected': '' }} value="0">Inactive</option>
-                            </select>
-                            <span id="{{$input_name}}-error" class="error invalid-feedback">{{$errors->first($input_name)}}</span>
-                        </div>
 
-                    </div>
+
+
+
+
+
+
+
                 </div>
             </div>
             <!-- /.card-body -->

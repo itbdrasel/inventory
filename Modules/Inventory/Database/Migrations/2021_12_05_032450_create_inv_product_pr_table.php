@@ -17,6 +17,7 @@ class CreateInvProductPrTable extends Migration
             $table->id();
             $table->bigInteger('product_id');
             $table->integer('warehouse_id');
+            $table->bigInteger('pr_id');
             $table->double('qty')->default(false);
             $table->tinyInteger('pr_status')->default(true)->comment('1=request, 2= received, 3=Cancel');
             $table->timestamps();

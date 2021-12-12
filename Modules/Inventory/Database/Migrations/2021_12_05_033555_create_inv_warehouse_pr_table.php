@@ -16,6 +16,8 @@ class CreateInvWarehousePrTable extends Migration
         Schema::create('inv_warehouse_pr', function (Blueprint $table) {
             $table->id();
             $table->integer('warehouse_id');
+            $table->string('title')->nullable();
+            $table->bigInteger('user_id');
             $table->tinyInteger('pr_status')->default(true)->comment('1=request, 2= received, 3=Cancel');
             $table->timestamps();
         });

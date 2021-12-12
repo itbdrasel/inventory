@@ -76,11 +76,10 @@
                                 @endphp
                                 <tr>
                                     <th class="text-center">SL</th>
-                                    <th class="sort text-left" data-row="name" id="name" >Name</th>
-                                    <th class="text-center">Code</th>
-                                    <th class="text-center">Category</th>
-                                    <th class="text-center">Quantity</th>
-                                    <th class="text-center">Price</th>
+                                    <th class="text-left" data-row="name" id="name" >Title</th>
+                                    <th>Warehouse</th>
+                                    <th class="text-center">Total Product</th>
+                                    <th class="text-center">Total Qty</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Manage</th>
                                 </tr>
@@ -95,23 +94,24 @@
                                     @foreach ($allData as $data)
                                         @php
 
-                                            $status = '<i class="fa fa-times-circle" aria-hidden="true" style="color:red; font-size:19px"></i>';
-                                            if ($data->status ==1) {
-                                                $status = '<i class="fa fa-check-circle" aria-hidden="true" style="color:green;font-size:19px"></i>';
+                                          $status = 'Request';
+                                            if ($data->pr_status==2){
+                                               $status = 'Received';
+                                            }elseif ($data->pr_status==3){
+                                                $status = 'Cancel';
                                             }
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ $c+$serial }}</td>
-                                            <td> <a href="{{url($bUrl.'/'.$data->id.'/edit')}}">{{ $data->product_name }} </a></td>
-                                            <td class="text-center">{{$data->product_code}}</td>
-                                            <td class="text-center">{{$data->category->name??''}}</td>
-                                            <td class="text-center">{{$data->quantity}}</td>
-                                            <td class="text-center">{{$data->unit_price}}</td>
+                                            <td> <a href="#">{{ $data->title }} </a></td>
+                                            <td>{{$data->warehouse->name}}</td>
+                                            <td class="text-center">{{$data->totalPrProduct->count??''}}</td>
+                                            <td class="text-center">{{$data->totalPrProduct->total??''}}</td>
                                             <td class="text-center">{!! $status !!}</td>
                                             <td class="text-center">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-outline-info">
-                                                        <a href="{{url($bUrl.'/'.$data->id.'/edit')}}"><i class="fa fa-edit"></i> </a>
+                                                        <a href="{{url($bUrl.'/'.$data->id)}}"><i class="fa fa-table"></i> </a>
                                                     </button>
                                                     <button type="button" class="btn btn-outline-info">
                                                         <a  id="action" data-toggle="modal" data-target="#windowmodal" href="{{url($bUrl.'/delete/'.$data->id)}}"><i class="fa fa-trash"></i> </a>
